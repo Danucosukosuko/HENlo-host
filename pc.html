@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exploit no disponible</title>
+  <style>
+    /* RESET BÁSICO */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* FONDO GRADIENTE + MATRIX */
+    body {
+      background: linear-gradient(to bottom, #000, #111);
+      font-family: 'Courier New', Courier, monospace;
+      position: relative;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0; /* detrás de todo */
+    }
+
+    /* CONTENEDOR CENTRAL */
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1; /* por encima de la matriz */
+      background: rgba(0,0,0,0.8);
+      border: 2px solid #00ffcc;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffcc;
+      max-width: 90%;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #ff0066;
+      text-shadow: 0 0 8px #ff0066;
+      margin-bottom: 1rem;
+    }
+
+    .mensaje {
+      font-size: 1.2rem;
+      color: #00ffcc;
+      line-height: 1.6;
+    }
+
+    .vita {
+      color: #00ffff;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrixCanvas"></canvas>
+
+  <div class="container">
+    <h1>⚠️ Atención ⚠️</h1>
+    <p class="mensaje">
+      El exploit sólo funciona en <span class="vita">PS Vita</span>.<br>
+      Por favor, abre esta web en una <span class="vita">PS Vita</span> 🕹️
+    </p>
+  </div>
+
+  <script>
+    // 🚨 Si es PS Vita, redirige a la raíz
+    if (navigator.userAgent.includes('PlayStation Vita')) {
+      window.location.href = '/';
+    }
+
+    // MATRIX BACKGROUND
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let W = canvas.width = window.innerWidth;
+    let H = canvas.height = window.innerHeight;
+    const fontSize = 16;
+    let columns = Math.floor(W / fontSize);
+    let drops = Array(columns).fill(0);
+
+    const chars = "アァイィウエカキクケコサシスセソタチツナニヌネノハヒフヘホマミムメモラリルレロ";
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.fillStyle = '#00ffcc';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > H && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    window.addEventListener('resize', () => {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      columns = Math.floor(W / fontSize);
+      drops = Array(columns).fill(0);
+    });
+  </script>
+</body>
+</html>
